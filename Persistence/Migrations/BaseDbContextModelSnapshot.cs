@@ -38,6 +38,9 @@ namespace Persistence.Migrations
                     b.Property<Guid>("PostId")
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.HasKey("Id");
 
                     b.HasIndex("PostId");
@@ -65,6 +68,9 @@ namespace Persistence.Migrations
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 

@@ -9,6 +9,7 @@ namespace Domain.Entities
 {
     public class Comment:BaseEntity
     {
+        public Guid PostId { get; set; }
         public string Description { get; set; }
 
         public Post Post { get; set; }

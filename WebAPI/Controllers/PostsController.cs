@@ -9,15 +9,13 @@ namespace WebAPI.Controllers
     [ApiController]
     public class PostsController : ControllerBase
     {
-        [HttpGet]
-        public async Task<IActionResult> Get() {
-            
-        }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(string id)
+        [HttpGet]
+        public async Task Get()
         {
             
         }
+
+        
     }
 }
