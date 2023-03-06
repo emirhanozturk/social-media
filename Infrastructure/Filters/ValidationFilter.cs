@@ -1,0 +1,29 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Infrastructure.Filters
+{
+    public class ValidationFilter : IAsyncActionFilter
+    {
+        public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+        {
+            if(!context.ModelState.IsValid)
+            {
+               var errors = context.ModelState
+                    .Where(x => x.Value.Errors.Any())
+                    .ToDictionary(e=>e.Key, e => e.Value.Errors.Select(e => e.ErrorMessage))
+                    .ToArray();
+                //Key:İlgili property'i , e.Value.Errors.Select(e => e.ErrorMessage)) ise o property'e ait bütün validasyon mesajlarını getirir.
+                context.Result = new BadRequestObjectResult(errors);
+                return;
+            }
+            //next delegate'i bir sonraki filter'ı temsil eder.
+            await next();
+        }
+    }
+}
