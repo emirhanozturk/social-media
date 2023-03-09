@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence.Contexts;
 using Persistence.Repositories;
+using Persistence.Repositories.File;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,8 +23,15 @@ namespace Persistence
             //services.AddSingleton<IPostRepository, PostRepository>();
 
             services.AddScoped<IPostWriteRepository, PostWriteRepository>();
-            services.AddScoped<IPostReadRepository, PostReadRepository>(); services.AddScoped<ICommentWriteRepository, CommentWriteRepository>();
+            services.AddScoped<IPostReadRepository, PostReadRepository>(); 
+            services.AddScoped<ICommentWriteRepository, CommentWriteRepository>();
               services.AddScoped<ICommentReadRepository, CommentReadRepository>();
+              services.AddScoped<IFileReadRepository, FileReadRepository>();
+              services.AddScoped<IFileWriteRepository, FileWriteRepository>();
+              services.AddScoped<IImageWriteRepository, ImageWriteRepository>();
+              services.AddScoped<IImageReadRepository, ImageReadRepository>();
+              services.AddScoped<IVideoWriteRepository,VideoWriteRepository>();
+              services.AddScoped<IVideoWriteRepository, VideoWriteRepository>();
 
             return services;
         }

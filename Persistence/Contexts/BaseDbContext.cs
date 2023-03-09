@@ -15,6 +15,9 @@ namespace Persistence.Contexts
         protected IConfiguration Configuration { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<Domain.Entities.File> Files { get; set; }
+        public DbSet<Image> Images { get; set; }
+        public DbSet<Video> Videos { get; set; }
 
         public BaseDbContext(DbContextOptions options, IConfiguration configuration) : base(options)
         {
@@ -25,7 +28,7 @@ namespace Persistence.Contexts
         //interceptor
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            //ChangeTracker :Entityler üzerinden yapılan değişikliklerin ya da yeni eklenen verilerin yakalanmasını sağlayan propertydir.Update operasyonlarında Track edilen verileri elde etmemizi sağlar.
+            
             var datas = ChangeTracker
                 .Entries<BaseEntity>();
 
