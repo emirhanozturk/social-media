@@ -1,5 +1,6 @@
-﻿using Application.Services;
+﻿using Application.Abstracts.Storage;
 using Infrastructure.Services;
+using Infrastructure.Services.Storages;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,12 @@ namespace Infrastructure
     {
         public static void AddInfrastructureServices(this IServiceCollection services)
         {
-            services.AddScoped<IFileService, FileService>();
+            services.AddScoped<IStorageService, StorageService>();
+        }
+
+        public static void Storage<T>(this IServiceCollection services) where T : class,IStorage
+        {
+            services.AddScoped<IStorage, T>();
         }
     }
 }
