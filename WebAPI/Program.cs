@@ -2,6 +2,7 @@ using Application.Validators.Posts;
 using FluentValidation.AspNetCore;
 using Infrastructure;
 using Infrastructure.Filters;
+using Infrastructure.Services.Storage.AzureStorage;
 using Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddInfrastructureServices();
+builder.Services.Storage<AzureStorage>();
 builder.Services.AddCors(options=>options.AddDefaultPolicy(policy =>
     policy.WithOrigins("http://localhost:4200", "https://localhost:4200").AllowAnyHeader().AllowAnyMethod()
 ));

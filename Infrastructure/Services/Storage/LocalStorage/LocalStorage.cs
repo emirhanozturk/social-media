@@ -3,13 +3,14 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Services.Storages.LocalStorage
+namespace Infrastructure.Services.Storage.LocalStorage
 {
-    public class LocalStorage : ILocalStorage
+    public class LocalStorage : Storage ,ILocalStorage
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
 
@@ -48,8 +49,11 @@ namespace Infrastructure.Services.Storages.LocalStorage
 
             foreach (IFormFile file in files)
             {
-                bool result = await CopyFileAsync($"{uploadPath}\\{file.Name}", file);
-                datas.Add((file.Name, $"{path}\\{file.Name}"));
+                var newFileName = await FileRenameAsync(path, file.Name, IsExists);
+
+
+                bool result = await CopyFileAsync($"{uploadPath}\\{newFileName}", file);
+                datas.Add((newFileName, $"{path}\\{newFileName}"));
             }
 
 
