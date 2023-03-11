@@ -8,5 +8,6 @@ namespace Domain.Entities
 {
     public class Image : File
     {
+        public Post Post { get; set; }
     }
 }
