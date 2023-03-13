@@ -1,3 +1,4 @@
+using Application;
 using Application.Validators.Posts;
 using FluentValidation.AspNetCore;
 using Infrastructure;
@@ -11,7 +12,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddInfrastructureServices();
+builder.Services.AddApplicationServices();
 builder.Services.Storage<AzureStorage>();
+
 builder.Services.AddCors(options=>options.AddDefaultPolicy(policy =>
     policy.WithOrigins("http://localhost:4200", "https://localhost:4200").AllowAnyHeader().AllowAnyMethod()
 ));
