@@ -9,6 +9,6 @@ namespace Application.Features.Commands.Post.RemovePost
 {
     public class RemovePostCommandRequest : IRequest<RemovePostCommandResponse>
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
     }
 }

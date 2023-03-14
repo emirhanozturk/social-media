@@ -2,7 +2,18 @@
 using Microsoft.AspNetCore.Mvc;
 using Application.Dtos;
 using System.Net;
-using Application.RequestParamaters;
+using Domain.Entities;
+using Application.Abstracts.Storage;
+using Microsoft.EntityFrameworkCore;
+using MediatR;
+using Application.Features.Queries.Posts.GetPostById;
+using Application.Features.Queries.Posts.GetAllPost;
+using Application.Features.Commands.Post.CreatePost;
+using Application.Features.Commands.Post.UpdatePost;
+using Application.Features.Commands.Post.RemovePost;
+using Application.Features.Commands.Images.UploadImage;
+using Application.Features.Commands.Images.RemoveImage;
+using Application.Features.Queries.Images.GetPostImages;
 
 namespace WebAPI.Controllers
 {
@@ -10,38 +21,75 @@ namespace WebAPI.Controllers
     [ApiController]
     public class PostsController : ControllerBase
     {
+      
 
-        private readonly IWebHostEnvironment _webHostEnvironment;
+        readonly IMediator _mediator;
 
-        public PostsController(IWebHostEnvironment webHostEnvironment)
+        public PostsController(IMediator mediator)
         {
-
-            _webHostEnvironment = webHostEnvironment;
+            _mediator = mediator;
         }
 
-        [HttpPost("[action]")]
-        public async Task<IActionResult> Upload()
+        [HttpGet]
+        public async Task<IActionResult> Get([FromQuery] GetAllPostQueryRequest getAllPostQueryRequest)
         {
-            //wwwroot/resource/post-images
-            string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath,"resource/post-images");
+            GetAllPostQueryResponse response = await _mediator.Send(getAllPostQueryRequest);
+            return Ok(response);
+           
+        }
 
-            if (!Directory.Exists(uploadPath))
-            {
-                Directory.CreateDirectory(uploadPath);
-            }
+        [HttpPost]
+        public async Task<IActionResult> Post(CreatePostCommandRequest createPostCommandRequest)
+        {
+            CreatePostCommandResponse response = await _mediator.Send(createPostCommandRequest);
+            return StatusCode((int)HttpStatusCode.Created);
+        }
 
-            Random r = new();
-            foreach (IFormFile file in Request.Form.Files)
-            {
-                string fullPath = Path.Combine(uploadPath, $"{r.Next()}{Path.GetExtension(file.FileName)}");
-
-                using FileStream fileStream = new(fullPath, FileMode.Create, FileAccess.Write, FileShare.None,1024*1024,useAsync:false);
-                await file.CopyToAsync(fileStream);
-                await fileStream.FlushAsync();
-            }
+        [HttpPut]
+        public async Task<IActionResult> Put([FromBody]UpdatePostCommandRequest updatePostCommandRequest)
+        {
+            UpdatePostCommandResponse response = await _mediator.Send(updatePostCommandRequest);
             return Ok();
         }
 
-        
+        [HttpDelete("{Id}")]
+        public async Task<IActionResult> Delete([FromRoute] RemovePostCommandRequest removePostCommandRequest)
+        {
+            RemovePostCommandResponse response = await _mediator.Send(removePostCommandRequest);
+            return Ok();
+        }
+
+        [HttpGet("{Id}")]
+        public async Task<IActionResult> GetById([FromRoute]GetPostByIdQueryRequest getPostByIdQueryRequest)
+        {
+            GetPostByIdQueryResponse result = await _mediator.Send(getPostByIdQueryRequest);
+            return Ok(result);
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Upload([FromQuery] UploadImageCommandRequest uploadImageCommandRequest)
+        {
+            uploadImageCommandRequest.FormFiles = Request.Form.Files;
+            UploadImageCommandResponse response =  await _mediator.Send(uploadImageCommandRequest);
+            return Ok();
+        }
+
+        [HttpGet("[action]/{id}")]
+        public async Task<IActionResult> GetImages([FromRoute] GetPostImagesQueryRequest getPostImagesQueryRequest)
+        {
+            List<GetPostImagesQueryResponse>  response = await _mediator.Send(getPostImagesQueryRequest);
+            return Ok(response);
+        }
+
+        [HttpDelete("[action]/{Id}")]
+        public async Task<IActionResult> DeleteImage([FromRoute] string id, [FromQuery] string imageId)
+        {
+            RemoveImageCommandRequest removeImageCommandRequest = new() { Id = id, ImageId = imageId };
+            RemoveImageCommandResponse response = await _mediator.Send(removeImageCommandRequest);
+            return Ok();
+
+        }
+
+
     }
 }

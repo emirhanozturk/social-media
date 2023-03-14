@@ -1,4 +1,4 @@
-﻿using Application.Dtos;
+﻿using Application.Dtos.Posts;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Commands.Post.CreatePost
 {
-    public class UpdatePostCommandRequest : IRequest<UpdatePostCommandResponse>
+    public class CreatePostCommandRequest : IRequest<CreatePostCommandResponse>
     {
         public CreatePostDto CreatePostDto { get; set; }
     }

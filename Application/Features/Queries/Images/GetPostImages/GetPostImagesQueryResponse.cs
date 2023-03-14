@@ -8,5 +8,8 @@ namespace Application.Features.Queries.Images.GetPostImages
 {
     public  class GetPostImagesQueryResponse
     {
+        public Guid Id { get; set; }
+        public string Path { get; set; }
+        public string FileName { get; set; }
     }
 }

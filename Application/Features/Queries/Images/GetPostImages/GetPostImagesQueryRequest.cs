@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Queries.Images.GetPostImages
 {
-    public class GetPostImagesQueryRequest : IRequest<GetPostImagesQueryResponse>
+    public class GetPostImagesQueryRequest : IRequest<List<GetPostImagesQueryResponse>>
     {
+        public string Id { get; set; }
     }
 }

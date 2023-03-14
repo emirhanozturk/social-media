@@ -9,5 +9,7 @@ namespace Application.Features.Commands.Images.RemoveImage
 {
     public class RemoveImageCommandRequest : IRequest<RemoveImageCommandResponse>
     {
+        public string Id { get; set; }
+        public string ImageId { get; set; }
     }
 }

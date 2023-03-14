@@ -1,4 +1,4 @@
-﻿using Application.Dtos;
+﻿using Application.Dtos.Posts;
 using FluentValidation;
 
 namespace Application.Validators.Posts

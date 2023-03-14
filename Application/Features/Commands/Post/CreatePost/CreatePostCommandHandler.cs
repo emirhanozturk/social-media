@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Commands.Post.CreatePost
 {
-    public class UpdatePostCommandHandler : IRequestHandler<UpdatePostCommandRequest, UpdatePostCommandResponse>
+    public class CreatePostCommandHandler : IRequestHandler<CreatePostCommandRequest, CreatePostCommandResponse>
     {
         private readonly IPostWriteRepository _postWriteRepository;
 
-        public UpdatePostCommandHandler(IPostWriteRepository postWriteRepository)
+        public CreatePostCommandHandler(IPostWriteRepository postWriteRepository)
         {
             _postWriteRepository = postWriteRepository;
         }
 
-        public async Task<UpdatePostCommandResponse> Handle(UpdatePostCommandRequest request, CancellationToken cancellationToken)
+        public async Task<CreatePostCommandResponse> Handle(CreatePostCommandRequest request, CancellationToken cancellationToken)
         {
             await _postWriteRepository.AddAsync(new()
             {

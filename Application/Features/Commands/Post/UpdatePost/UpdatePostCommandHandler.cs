@@ -1,4 +1,5 @@
 ﻿using Application.Repositories;
+using Domain.Entities;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -11,20 +12,22 @@ namespace Application.Features.Commands.Post.UpdatePost
     public class UpdatePostCommandHandler : IRequestHandler<UpdatePostCommandRequest, UpdatePostCommandResponse>
     {
         private readonly IPostWriteRepository _postWriteRepository;
+        private readonly IPostReadRepository _postReadRepository;
 
-        public UpdatePostCommandHandler(IPostWriteRepository postWriteRepository)
+        public UpdatePostCommandHandler(IPostWriteRepository postWriteRepository, IPostReadRepository postReadRepository)
         {
             _postWriteRepository = postWriteRepository;
+            _postReadRepository = postReadRepository;
         }
 
         public async Task<UpdatePostCommandResponse> Handle(UpdatePostCommandRequest request, CancellationToken cancellationToken)
         {
-            await _postWriteRepository.AddAsync(new()
-            {
-                Description = request.CreatePostDto.Description,
-                Title = request.CreatePostDto.Title
-            });
+            Domain.Entities.Post post = await _postReadRepository.GetByIdAsync(request.UpdatePostDto.Id);
+            post.Description = request.UpdatePostDto.Description;
+            post.Title = request.UpdatePostDto.Title;
+
             await _postWriteRepository.SaveAsync();
+
             return new();
         }
     }

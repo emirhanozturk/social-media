@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Commands.Post.CreatePost
 {
-    public class UpdatePostCommandResponse
+    public class CreatePostCommandResponse
     {
     }
 }
