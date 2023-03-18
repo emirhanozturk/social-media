@@ -14,11 +14,14 @@ using Application.Features.Commands.Post.RemovePost;
 using Application.Features.Commands.Images.UploadImage;
 using Application.Features.Commands.Images.RemoveImage;
 using Application.Features.Queries.Images.GetPostImages;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = "Admin")]
+
     public class PostsController : ControllerBase
     {
       

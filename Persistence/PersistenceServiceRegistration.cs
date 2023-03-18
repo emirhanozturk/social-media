@@ -1,4 +1,5 @@
 ﻿using Application.Repositories;
+using Domain.Entities.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,6 +22,15 @@ namespace Persistence
 
             //services.AddDbContext<BaseDbContext>(options => options.UseNpgsql(Configuration.ConnectionString));
             //services.AddSingleton<IPostRepository, PostRepository>();
+
+            services.AddIdentity<AppUser, AppRole>(options =>
+            {
+                options.Password.RequiredLength = 3;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+            }).AddEntityFrameworkStores<BaseDbContext>();
 
             services.AddScoped<IPostWriteRepository, PostWriteRepository>();
             services.AddScoped<IPostReadRepository, PostReadRepository>(); 

@@ -1,5 +1,7 @@
 ﻿using Domain.Entities;
 using Domain.Entities.Common;
+using Domain.Entities.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -10,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Persistence.Contexts
 {
-    public class BaseDbContext : DbContext
+    public class BaseDbContext : IdentityDbContext<AppUser,AppRole,string>
     {
         protected IConfiguration Configuration { get; set; }
         public DbSet<Post> Posts { get; set; }
