@@ -26,20 +26,7 @@ namespace WebAPI.Controllers
             return Ok(createUserCommandResponse);
         }
 
-        [HttpPost("[action]")]
-        public async Task<IActionResult> Login(LoginUserCommandRequest loginUserCommandRequest)
-        {
-           LoginUserCommandResponse loginUserCommandResponse = await _mediator.Send(loginUserCommandRequest);
-            return Ok(loginUserCommandResponse);
-        }
-
-        [HttpPost("login-with-google")]
-        public async Task<IActionResult> GoogleLogin(GoogleLoginCommandRequest googleLoginCommandRequest) 
-        { 
-            GoogleLoginCommandResponse googleLoginCommandResponse =  await _mediator.Send(googleLoginCommandRequest);
-            return Ok(googleLoginCommandResponse);
-        }
-
+       
 
 
     }

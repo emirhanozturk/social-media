@@ -1,4 +1,6 @@
-﻿using Domain.Entities.Identity;
+﻿using Application.Abstracts.Services;
+using Application.Dtos.User;
+using Domain.Entities.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -11,36 +13,31 @@ namespace Application.Features.Commands.AppUsers.CreateUser
 {
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommandRequest, CreateUserCommandResponse>
     {
-        private readonly UserManager<AppUser> _userManager;
+        private readonly IUserService _userService;
 
-        public CreateUserCommandHandler(UserManager<AppUser> userManager)
+        public CreateUserCommandHandler(IUserService userService)
         {
-            _userManager = userManager;
+            _userService = userService;
         }
 
         public async Task<CreateUserCommandResponse> Handle(CreateUserCommandRequest request, CancellationToken cancellationToken)
         {
-           IdentityResult result = await _userManager.CreateAsync( new()
+            CreateUserResponseDto createUserResponseDto =  await _userService.CreateAsync(new()
             {
-                Id = Guid.NewGuid().ToString(),
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                UserName= request.UserName,
-                Email= request.Email
-            },request.Password);
+               Email= request.Email,
+               FirstName= request.FirstName,
+               LastName= request.LastName,
+               UserName = request.UserName,
+               Password= request.Password,
+               ConfirmPassword = request.ConfirmPassword
+           });
 
-            CreateUserCommandResponse createUserCommandResponse = new CreateUserCommandResponse() {IsSuccess = result.Succeeded };
 
-            if(createUserCommandResponse.IsSuccess)
+            return new()
             {
-                createUserCommandResponse.Message = "Kullanıcı oluşturma başarılı";
-            }
-            else
-                foreach(var error in result.Errors)
-                {
-                    createUserCommandResponse.Message = $"Error Code : {error.Code} Description of Error: {error.Description}\n";
-                }
-            return createUserCommandResponse;
+                Message = createUserResponseDto.Message,
+                IsSuccess= createUserResponseDto.IsSuccess,
+            };
 
         }
     }

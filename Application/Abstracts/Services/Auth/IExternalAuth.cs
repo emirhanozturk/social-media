@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Abstracts.Token
+namespace Application.Abstracts.Services.Auth
 {
-    public interface ITokenHandler
+    public interface IExternalAuth
     {
-        Dtos.Token CreateAccessToken(int tokenLifeTime);
+        Task<Dtos.Token> GoogleLoginAsync(string idToken,int tokenLifeTime);
     }
 }
