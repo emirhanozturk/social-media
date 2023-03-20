@@ -1,4 +1,5 @@
 ﻿using Application.Features.Commands.AppUsers.CreateUser;
+using Application.Features.Commands.AppUsers.GoogleLogin;
 using Application.Features.Commands.AppUsers.Login;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -31,6 +32,14 @@ namespace WebAPI.Controllers
            LoginUserCommandResponse loginUserCommandResponse = await _mediator.Send(loginUserCommandRequest);
             return Ok(loginUserCommandResponse);
         }
+
+        [HttpPost("login-with-google")]
+        public async Task<IActionResult> GoogleLogin(GoogleLoginCommandRequest googleLoginCommandRequest) 
+        { 
+            GoogleLoginCommandResponse googleLoginCommandResponse =  await _mediator.Send(googleLoginCommandRequest);
+            return Ok(googleLoginCommandResponse);
+        }
+
 
 
     }
