@@ -33,13 +33,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     options.TokenValidationParameters = new()
     {
         ValidateIssuerSigningKey = true,
-        ValidateIssuer= true,
-        ValidateAudience= true,
-        ValidateLifetime= true,
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
 
         ValidAudience = builder.Configuration["Token:Audience"],
         ValidIssuer = builder.Configuration["Token:Issuer"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"])) 
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"])),
+        LifetimeValidator = (notBefore, expires, securityToken, validationParamater) => expires !=null ? expires > DateTime.UtcNow : false
     };
 } );
 

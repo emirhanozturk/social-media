@@ -45,5 +45,17 @@ namespace Persistence.Services
                 }
             return createUserResponseDto;
         }
+
+        public async Task RefreshTokenUpdate(string refreshToken, AppUser appUser, DateTime accessTokenExpireDate,int addToAccessTokenDate)
+        {
+            if (appUser != null)
+            {
+                appUser.RefreshToken = refreshToken;
+                appUser.RefreshTokenEndDate = accessTokenExpireDate.AddSeconds(addToAccessTokenDate);
+                await _userManager.UpdateAsync(appUser);
+            }
+            else
+                throw new Exception("UserNotFound");
+        }
     }
 }

@@ -7,6 +7,7 @@ using Domain.Entities.Identity;
 using Google.Apis.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -22,13 +23,15 @@ namespace Persistence.Services
         private readonly UserManager<AppUser> _userManager;
         private readonly ITokenHandler _tokenHandler;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly IUserService _userService;
 
-        public AuthService(IConfiguration configuration, UserManager<AppUser> userManager, ITokenHandler tokenHandler, SignInManager<AppUser> signInManager)
+        public AuthService(IConfiguration configuration, UserManager<AppUser> userManager, ITokenHandler tokenHandler, SignInManager<AppUser> signInManager, IUserService userService)
         {
             _configuration = configuration;
             _userManager = userManager;
             _tokenHandler = tokenHandler;
             _signInManager = signInManager;
+            _userService = userService;
         }
 
         public async Task<Token> GoogleLoginAsync(string idToken, int tokenLifeTime)
@@ -64,38 +67,53 @@ namespace Persistence.Services
             if (result)
             {
                 await _userManager.AddLoginAsync(appUser, userLoginInfo);
+                Token token = _tokenHandler.CreateAccessToken(tokenLifeTime);
+                await _userService.RefreshTokenUpdate(token.RefreshToken, appUser,token.Expiration,10);
+                return token;
             }
             else
-            {
                 throw new Exception();
-            }
 
 
-            Token token = _tokenHandler.CreateAccessToken(tokenLifeTime);
-            return token;
+            
         }
 
         public async Task<Token> LoginAsync(string usernameOrEmail, string password,int tokenLifetime)
         {
-            AppUser user = await _userManager.FindByNameAsync(usernameOrEmail);
-            if (user == null)
+            AppUser appUser = await _userManager.FindByNameAsync(usernameOrEmail);
+            if (appUser == null)
             {
-                user = await _userManager.FindByEmailAsync(usernameOrEmail);
+                appUser = await _userManager.FindByEmailAsync(usernameOrEmail);
             }
 
-            if (user == null)
+            if (appUser == null)
             {
                 throw new Exception("Kullanıcı bulunamadı");
             }
 
-            SignInResult result = await _signInManager.CheckPasswordSignInAsync(user, password, false);
+            SignInResult result = await _signInManager.CheckPasswordSignInAsync(appUser, password, false);
             if (result.Succeeded)
             {
                 Token token = _tokenHandler.CreateAccessToken(tokenLifetime);
+                await _userService.RefreshTokenUpdate(token.RefreshToken, appUser, token.Expiration, 10);
                 return token;
             }
+            else
+                throw new AuthenticationException();
+        }
 
-            throw new AuthenticationException();
+        public async Task<Token> RefreshTokenLoginAsync(string refreshToken)
+        {
+         AppUser? appUser =  await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
+            if (appUser != null && appUser?.RefreshTokenEndDate > DateTime.UtcNow)
+            {
+                Token token = _tokenHandler.CreateAccessToken(20);
+                await _userService.RefreshTokenUpdate(token.RefreshToken, appUser, token.Expiration, 15);
+                return token;
+            }
+            else
+                throw new Exception("User not found");
+
         }
     }
 }

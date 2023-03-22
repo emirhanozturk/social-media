@@ -9,5 +9,6 @@ namespace Application.Abstracts.Services.Auth
     public interface IInternalAuth
     {
         Task<Dtos.Token> LoginAsync(string usernameOrEmail,string password, int tokenLifetime);
+        Task<Dtos.Token> RefreshTokenLoginAsync(string refreshToken);
     }
 }

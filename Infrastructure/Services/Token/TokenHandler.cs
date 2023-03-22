@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -37,7 +38,18 @@ namespace Infrastructure.Services.Token
 
             JwtSecurityTokenHandler jwtSecurityTokenHandler = new();
             token.AccessToken = jwtSecurityTokenHandler.WriteToken(jwtSecurityToken);
+
+            string refreshToken =  CreateRefreshToken();
+            token.RefreshToken = refreshToken;
             return token;
+        }
+
+        public string CreateRefreshToken()
+        {
+            byte[] num = new byte[32];
+            using RandomNumberGenerator random = RandomNumberGenerator.Create();
+            random.GetBytes(num);
+            return Convert.ToBase64String(num);
         }
     }
 }

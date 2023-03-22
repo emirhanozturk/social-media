@@ -1,5 +1,6 @@
 ﻿using Application.Features.Commands.AppUsers.GoogleLogin;
 using Application.Features.Commands.AppUsers.Login;
+using Application.Features.Commands.AppUsers.RefreshToken;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +23,13 @@ namespace WebAPI.Controllers
         {
             LoginUserCommandResponse loginUserCommandResponse = await _mediator.Send(loginUserCommandRequest);
             return Ok(loginUserCommandResponse);
+        }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> RefreshTokenLogin([FromForm]RefreshTokenLoginCommandRequest refreshTokenLoginCommandRequest)
+        {
+            RefreshTokenLoginCommandResponse refreshTokenLoginCommandResponse = await _mediator.Send(refreshTokenLoginCommandRequest);
+            return Ok(refreshTokenLoginCommandResponse);
         }
 
         [HttpPost("login-with-google")]

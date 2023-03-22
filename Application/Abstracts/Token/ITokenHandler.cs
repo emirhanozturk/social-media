@@ -10,5 +10,7 @@ namespace Application.Abstracts.Token
     public interface ITokenHandler
     {
         Dtos.Token CreateAccessToken(int tokenLifeTime);
+        string CreateRefreshToken();
+
     }
 }

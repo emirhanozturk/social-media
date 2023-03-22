@@ -1,4 +1,6 @@
-﻿using Application.Repositories;
+﻿using Application.Abstracts.Services;
+using Application.Abstracts.Services.Auth;
+using Application.Repositories;
 using Domain.Entities.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -6,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Persistence.Contexts;
 using Persistence.Repositories;
 using Persistence.Repositories.File;
+using Persistence.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,6 +45,11 @@ namespace Persistence
               services.AddScoped<IImageReadRepository, ImageReadRepository>();
               services.AddScoped<IVideoWriteRepository,VideoWriteRepository>();
               services.AddScoped<IVideoWriteRepository, VideoWriteRepository>();
+
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IInternalAuth, AuthService>();
+            services.AddScoped<IExternalAuth, AuthService>();
 
             return services;
         }
