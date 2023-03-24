@@ -7,6 +7,10 @@ using Infrastructure.Services.Storage.AzureStorage;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Persistence;
+using Serilog;
+using Serilog.Core;
+using Serilog.Events;
+using Serilog.Sinks.PostgreSQL;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +25,20 @@ builder.Services.Storage<AzureStorage>();
 builder.Services.AddCors(options=>options.AddDefaultPolicy(policy =>
     policy.WithOrigins("http://localhost:4200", "https://localhost:4200").AllowAnyHeader().AllowAnyMethod()
 ));
+
+Logger log = new LoggerConfiguration().WriteTo.File("logs/log.txt").WriteTo.PostgreSQL(builder.Configuration.GetConnectionString("PostgreSQL"),"logs",needAutoCreateTable: true,columnOptions:new Dictionary<string, ColumnWriterBase>
+{
+    {"message", new RenderedMessageColumnWriter() },
+    {"message_template",new MessageTemplateColumnWriter() },
+    { "level" , new LevelColumnWriter() },
+    { "time_stamp" , new TimestampColumnWriter() },
+    { "exception" , new ExceptionColumnWriter() },
+    {"log_event",new LogEventSerializedColumnWriter() }
+})
+    .CreateLogger();
+
+builder.Host.UseSerilog(log);
+
 
 builder.Services.AddControllers(options => options.Filters.Add<ValidationFilter>())
     .AddFluentValidation(congifuration =>congifuration.RegisterValidatorsFromAssemblyContaining<CreatePostValidator>())
