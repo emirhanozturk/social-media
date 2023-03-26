@@ -67,7 +67,7 @@ namespace Persistence.Services
             if (result)
             {
                 await _userManager.AddLoginAsync(appUser, userLoginInfo);
-                Token token = _tokenHandler.CreateAccessToken(tokenLifeTime);
+                Token token = _tokenHandler.CreateAccessToken(tokenLifeTime,appUser);
                 await _userService.RefreshTokenUpdate(token.RefreshToken, appUser,token.Expiration,10);
                 return token;
             }
@@ -94,7 +94,7 @@ namespace Persistence.Services
             SignInResult result = await _signInManager.CheckPasswordSignInAsync(appUser, password, false);
             if (result.Succeeded)
             {
-                Token token = _tokenHandler.CreateAccessToken(tokenLifetime);
+                Token token = _tokenHandler.CreateAccessToken(tokenLifetime,appUser);
                 await _userService.RefreshTokenUpdate(token.RefreshToken, appUser, token.Expiration, 10);
                 return token;
             }
@@ -107,7 +107,7 @@ namespace Persistence.Services
          AppUser? appUser =  await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
             if (appUser != null && appUser?.RefreshTokenEndDate > DateTime.UtcNow)
             {
-                Token token = _tokenHandler.CreateAccessToken(20);
+                Token token = _tokenHandler.CreateAccessToken(20,appUser);
                 await _userService.RefreshTokenUpdate(token.RefreshToken, appUser, token.Expiration, 15);
                 return token;
             }
