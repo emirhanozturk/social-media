@@ -19,7 +19,7 @@ namespace Application.Features.Commands.AppUsers.GoogleLogin
 
         public async Task<GoogleLoginCommandResponse> Handle(GoogleLoginCommandRequest request, CancellationToken cancellationToken)
         {
-            var token = await _authService.GoogleLoginAsync(request.IdToken, 20);
+            var token = await _authService.GoogleLoginAsync(request.IdToken, 900);
             return new() {Token = token };
         }
     }

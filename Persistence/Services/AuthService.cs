@@ -107,8 +107,8 @@ namespace Persistence.Services
          AppUser? appUser =  await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
             if (appUser != null && appUser?.RefreshTokenEndDate > DateTime.UtcNow)
             {
-                Token token = _tokenHandler.CreateAccessToken(20,appUser);
-                await _userService.RefreshTokenUpdate(token.RefreshToken, appUser, token.Expiration, 15);
+                Token token = _tokenHandler.CreateAccessToken(900,appUser);
+                await _userService.RefreshTokenUpdate(token.RefreshToken, appUser, token.Expiration, 300);
                 return token;
             }
             else
