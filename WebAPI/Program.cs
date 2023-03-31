@@ -108,5 +108,6 @@ app.Use(async (context,next)=>
 });
 
 app.MapControllers();
+app.MapHubs();
 
 app.Run();
