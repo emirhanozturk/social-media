@@ -10,6 +10,7 @@ namespace Application.Features.Commands.Post.CreatePost
 {
     public class CreatePostCommandRequest : IRequest<CreatePostCommandResponse>
     {
-        public CreatePostDto CreatePostDto { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
     }
 }
