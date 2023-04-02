@@ -2,7 +2,7 @@
 {
     public class GetAllPostQueryResponse
     {
-        public int Count { get; set; }
+        public int TotalCount { get; set; }
         public object Posts { get; set; }
     }
 }
