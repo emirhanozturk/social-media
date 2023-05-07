@@ -1,4 +1,5 @@
 ﻿using Domain.Entities.Common;
+using Domain.Entities.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,6 @@ namespace Domain.Entities
         public string Description { get; set; }
         public ICollection<Image> Images { get; set; }
         public ICollection<Comment>? Comments { get; set;}
-
-        
+        public virtual AppUser User { get; set; }
     }
 }
