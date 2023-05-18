@@ -30,7 +30,7 @@ namespace Application.Features.Commands.Post.CreatePost
 
         public async Task<CreatePostCommandResponse> Handle(CreatePostCommandRequest request, CancellationToken cancellationToken)
         {
-            var username = _httpContextAccessor?.HttpContext.User.Identity.Name;
+            var username = _httpContextAccessor?.HttpContext?.User?.Identity?.Name;
             if(!string.IsNullOrEmpty(username) )
             {
                AppUser? user = await _userManager.Users.FirstOrDefaultAsync(u => u.UserName == username);

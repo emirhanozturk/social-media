@@ -15,6 +15,9 @@ using Application.Features.Commands.Images.UploadImage;
 using Application.Features.Commands.Images.RemoveImage;
 using Application.Features.Queries.Images.GetPostImages;
 using Microsoft.AspNetCore.Authorization;
+using Application.CustomAttributes;
+using Application.Consts;
+using Application.Enums;
 
 namespace WebAPI.Controllers
 {
@@ -33,6 +36,7 @@ namespace WebAPI.Controllers
 
         [HttpGet]
         [Authorize(AuthenticationSchemes = "Admin")]
+        [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Posts,ActionType = ActionType.Reading,Definition = "Get Post Items")]
         public async Task<IActionResult> Get([FromQuery] GetAllPostQueryRequest getAllPostQueryRequest)
         {
             GetAllPostQueryResponse response = await _mediator.Send(getAllPostQueryRequest);
@@ -42,6 +46,7 @@ namespace WebAPI.Controllers
 
         [HttpPost]
         [Authorize(AuthenticationSchemes = "Admin")]
+        [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Posts, ActionType = ActionType.Writing, Definition = "Add Post Items")]
         public async Task<IActionResult> Post(CreatePostCommandRequest createPostCommandRequest)
         {
             CreatePostCommandResponse response = await _mediator.Send(createPostCommandRequest);
@@ -50,6 +55,7 @@ namespace WebAPI.Controllers
 
         [HttpPut]
         [Authorize(AuthenticationSchemes = "Admin")]
+        [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Posts, ActionType = ActionType.Updating, Definition = "Update Post Items")]
         public async Task<IActionResult> Put([FromBody]UpdatePostCommandRequest updatePostCommandRequest)
         {
             UpdatePostCommandResponse response = await _mediator.Send(updatePostCommandRequest);
@@ -58,6 +64,7 @@ namespace WebAPI.Controllers
 
         [HttpDelete("{Id}")]
         [Authorize(AuthenticationSchemes = "Admin")]
+        [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Posts, ActionType = ActionType.Deleting, Definition = "Remove Post Items")]
         public async Task<IActionResult> Delete([FromRoute] RemovePostCommandRequest removePostCommandRequest)
         {
             RemovePostCommandResponse response = await _mediator.Send(removePostCommandRequest);
@@ -66,6 +73,7 @@ namespace WebAPI.Controllers
 
         [HttpGet("{Id}")]
         [Authorize(AuthenticationSchemes = "Admin")]
+        [AuthorizeDefinition(Menu = AuthorizeDefinitionConstants.Posts, ActionType = ActionType.Reading, Definition = "Get Post Item By Id")]
         public async Task<IActionResult> GetById([FromRoute]GetPostByIdQueryRequest getPostByIdQueryRequest)
         {
             GetPostByIdQueryResponse result = await _mediator.Send(getPostByIdQueryRequest);
