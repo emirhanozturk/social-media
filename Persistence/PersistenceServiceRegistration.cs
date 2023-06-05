@@ -50,6 +50,7 @@ namespace Persistence
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IInternalAuth, AuthService>();
             services.AddScoped<IExternalAuth, AuthService>();
+            services.AddScoped<IRoleService, RoleService>();
 
             return services;
         }
