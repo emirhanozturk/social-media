@@ -21,6 +21,9 @@ namespace Persistence.Contexts
         public DbSet<Image> Images { get; set; }
         public DbSet<Video> Videos { get; set; }
 
+        public DbSet<Menu> Menus { get; set; }
+        public DbSet<Endpoint> Endpoints { get; set; }
+
         public BaseDbContext(DbContextOptions options, IConfiguration configuration) : base(options)
         {
             Configuration = configuration;

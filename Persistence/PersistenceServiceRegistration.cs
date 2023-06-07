@@ -45,6 +45,11 @@ namespace Persistence
               services.AddScoped<IImageReadRepository, ImageReadRepository>();
               services.AddScoped<IVideoWriteRepository,VideoWriteRepository>();
               services.AddScoped<IVideoWriteRepository, VideoWriteRepository>();
+              services.AddScoped<IEndpointReadRepository, EndpointReadRepository>();
+              services.AddScoped<IEndpointWriteRepository, EndpointWriteRepository>();
+              services.AddScoped<IMenuWriteRepository, MenuWriteRepository>();
+              services.AddScoped<IMenuReadRepository, MenuReadRepository>();
+            services.AddScoped<IAuthorizationEndpointService, AuthorizationEndpointService>();
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthService, AuthService>();
