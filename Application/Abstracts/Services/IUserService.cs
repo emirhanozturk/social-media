@@ -12,5 +12,8 @@ namespace Application.Abstracts.Services
     {
         Task<CreateUserResponseDto> CreateAsync(CreateUserDto createUserDto);
         Task RefreshTokenUpdate(string refreshToken, AppUser appUser, DateTime accessTokenExpireDate, int addToAccessTokenDate);
+
+        Task<List<GetAllUserDto>> GetAllUsersAsync(int page,int size);
+        int TotalCount { get; }
     }
 }

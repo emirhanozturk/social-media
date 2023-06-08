@@ -4,6 +4,7 @@ using Application.Features.Commands.AppUsers.CreateUser;
 using Domain.Entities.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace Persistence.Services
         {
             _userManager = userManager;
         }
+
 
         public async Task<CreateUserResponseDto> CreateAsync(CreateUserDto createUserDto)
         {
@@ -45,6 +47,24 @@ namespace Persistence.Services
                 }
             return createUserResponseDto;
         }
+
+        public async Task<List<GetAllUserDto>> GetAllUsersAsync(int page, int size)
+        {
+            var users =  await _userManager.Users.Skip(page*size).Take(size).ToListAsync();
+
+            return users.Select(user => new GetAllUserDto
+            {
+               Id = user.Id,
+               Email = user.Email,
+               FirstName = user.FirstName,
+               LastName = user.LastName,
+               TwoFactorEnabled= user.TwoFactorEnabled,
+               Username = user.UserName,
+            }).ToList();
+        }
+
+        public int TotalCount => _userManager.Users.Count();
+
 
         public async Task RefreshTokenUpdate(string refreshToken, AppUser appUser, DateTime accessTokenExpireDate,int addToAccessTokenDate)
         {
