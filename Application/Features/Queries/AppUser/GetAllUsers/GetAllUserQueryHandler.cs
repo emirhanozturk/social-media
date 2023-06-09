@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Features.Queries.AppUser
+namespace Application.Features.Queries.AppUser.GetAllUsers
 {
     public class GetAllUserQueryHandler : IRequestHandler<GetAllUsersQueryRequest, GetAllUsersQueryResponse>
     {

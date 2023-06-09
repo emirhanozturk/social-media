@@ -1,4 +1,4 @@
-﻿namespace Application.Features.Queries.AppUser
+﻿namespace Application.Features.Queries.AppUser.GetAllUsers
 {
     public class GetAllUsersQueryResponse
     {

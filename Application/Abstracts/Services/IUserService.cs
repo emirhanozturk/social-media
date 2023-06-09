@@ -15,5 +15,8 @@ namespace Application.Abstracts.Services
 
         Task<List<GetAllUserDto>> GetAllUsersAsync(int page,int size);
         int TotalCount { get; }
+
+        Task AssignRoleToUserAsync(string userId, string[] roles);
+        Task<string[]> GetRolesUser(string userId);
     }
 }

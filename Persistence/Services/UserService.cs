@@ -77,5 +77,29 @@ namespace Persistence.Services
             else
                 throw new Exception("UserNotFound");
         }
+
+        public async Task AssignRoleToUserAsync(string userId, string[] roles)
+        {
+           AppUser appUser = await _userManager.FindByIdAsync(userId);
+            if(appUser != null)
+            {
+              var appUserRoles = await  _userManager.GetRolesAsync(appUser);
+              await  _userManager.RemoveFromRolesAsync(appUser, appUserRoles);
+
+                await _userManager.AddToRolesAsync(appUser, roles);
+            }
+        }
+
+        public async Task<string[]> GetRolesUser(string userId)
+        {
+            AppUser appUser = await _userManager.FindByIdAsync(userId);
+            if(appUser != null)
+            {
+               var roles = await _userManager.GetRolesAsync(appUser);
+               return roles.ToArray();
+            }
+
+            return new string[] { };
+        }
     }
 }
