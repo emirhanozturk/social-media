@@ -8,6 +8,7 @@ using Infrastructure.Services.Configurations;
 using Infrastructure.Services.SignalR.HubServices;
 using Infrastructure.Services.Storage;
 using Infrastructure.Services.Token;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;

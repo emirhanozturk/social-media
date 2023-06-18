@@ -50,7 +50,7 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> Post(CreatePostCommandRequest createPostCommandRequest)
         {
             CreatePostCommandResponse response = await _mediator.Send(createPostCommandRequest);
-            return StatusCode((int)HttpStatusCode.Created);
+            return Ok(response);
         }
 
         [HttpPut]

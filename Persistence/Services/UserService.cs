@@ -101,5 +101,21 @@ namespace Persistence.Services
 
             return new string[] { };
         }
+
+        public async Task<AppUser> GetAppUserById(string userId)
+        {
+            AppUser appUser = await _userManager.FindByIdAsync(userId);
+            if(appUser!=null)
+            {
+                return appUser;
+            }
+            return null;
+        }
+
+        public async Task<AppUser> GetCurrentUser(string username)
+        {
+            var AppUser = await _userManager.FindByNameAsync(username);
+            return AppUser;
+        }
     }
 }

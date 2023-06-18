@@ -3,6 +3,7 @@ using Application.Validators.Posts;
 using FluentValidation.AspNetCore;
 using Infrastructure;
 using Infrastructure.Filters;
+using Infrastructure.Services.SignalR.Hubs;
 using Infrastructure.Services.Storage.AzureStorage;
 using Infrastructure.Services.Storage.LocalStorage;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

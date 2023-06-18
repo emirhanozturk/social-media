@@ -8,5 +8,6 @@ namespace Application.Features.Commands.Post.CreatePost
 {
     public class CreatePostCommandResponse
     {
+        public string PostId { get; set; }
     }
 }

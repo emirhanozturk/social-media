@@ -5,7 +5,9 @@ using Application.Features.Commands.AppUsers.CreateUser;
 using Application.Features.Commands.AppUsers.GoogleLogin;
 using Application.Features.Commands.AppUsers.Login;
 using Application.Features.Queries.AppUser.GetAllUsers;
+using Application.Features.Queries.AppUser.GetCurrentUser;
 using Application.Features.Queries.AppUser.GetRolesUser;
+using Application.Features.Queries.AppUser.GetUserById;
 using Application.Features.Queries.Posts.GetAllPost;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -59,7 +61,30 @@ namespace WebAPI.Controllers
             return Ok(assignRoleToUserCommandResponse);
         }
 
-       
+        [HttpGet("[Action]/{userId}")]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [AuthorizeDefinition(ActionType = ActionType.Reading, Definition = "Get User By Id", Menu = "Users")]
+
+        public async Task<IActionResult> GetUserById([FromRoute] GetUserByIdQueryRequest getUserByIdQueryRequest)
+        {
+            GetUserByIdQueryResponse getUserByIdQueryResponse = await _mediator.Send(getUserByIdQueryRequest);
+            return Ok(getUserByIdQueryResponse);
+        }
+
+        [HttpGet("[Action]")]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [AuthorizeDefinition(ActionType = ActionType.Reading, Definition = "Get Current User", Menu = "Users")]
+
+        public async Task<IActionResult> GetCurrentUser([FromRoute] GetCurrentUserQueryRequest getCurrentUserQueryRequest)
+        {
+            GetCurrentUserQueryResponse getCurrentUserQueryResponse = await _mediator.Send(getCurrentUserQueryRequest);
+            return Ok(getCurrentUserQueryResponse);
+        }
+
+
+
+
+
 
 
     }

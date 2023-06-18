@@ -18,5 +18,8 @@ namespace Application.Abstracts.Services
 
         Task AssignRoleToUserAsync(string userId, string[] roles);
         Task<string[]> GetRolesUser(string userId);
+        Task<AppUser> GetAppUserById(string userId);
+
+        Task<AppUser> GetCurrentUser(string username);
     }
 }

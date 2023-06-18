@@ -30,7 +30,8 @@ namespace Application.Features.Queries.Posts.GetAllPost
                 p.Title,
                 p.Description,
                 p.CreatedDate,
-                p.Images
+                p.Images,
+                p.User
             }).ToList();
             return new()
             {

@@ -29,22 +29,27 @@ namespace Application.Features.Commands.Post.CreatePost
         }
 
         public async Task<CreatePostCommandResponse> Handle(CreatePostCommandRequest request, CancellationToken cancellationToken)
-        {
+         {
             var username = _httpContextAccessor?.HttpContext?.User?.Identity?.Name;
-            if(!string.IsNullOrEmpty(username) )
+            var postId = Guid.NewGuid();
+            if (!string.IsNullOrEmpty(username) )
             {
                AppUser? user = await _userManager.Users.FirstOrDefaultAsync(u => u.UserName == username);
             await _postWriteRepository.AddAsync(new()
             {
+                Id = postId,
                 User = user,
                 Description = request.Description,
-                Title = request.Title
+                Title = request.Title,
             });
             await _postWriteRepository.SaveAsync();
             }
 
             await _postHubService.PostAddedMessageAsync($"{request.Description} post paylaşıldı.");
-            return new();
+            return new()
+            {
+                PostId = postId.ToString()
+            };
         }
     }
 }
