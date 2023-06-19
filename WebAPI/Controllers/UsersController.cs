@@ -4,10 +4,13 @@ using Application.Features.Commands.AppUsers.AssignRoleToUser;
 using Application.Features.Commands.AppUsers.CreateUser;
 using Application.Features.Commands.AppUsers.GoogleLogin;
 using Application.Features.Commands.AppUsers.Login;
+using Application.Features.Commands.AppUsers.UploadProfilePhotoToUser;
+using Application.Features.Commands.Images.UploadImage;
 using Application.Features.Queries.AppUser.GetAllUsers;
 using Application.Features.Queries.AppUser.GetCurrentUser;
 using Application.Features.Queries.AppUser.GetRolesUser;
 using Application.Features.Queries.AppUser.GetUserById;
+using Application.Features.Queries.AppUser.GetUserProfilePhoto;
 using Application.Features.Queries.Posts.GetAllPost;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -74,12 +77,34 @@ namespace WebAPI.Controllers
         [HttpGet("[Action]")]
         [Authorize(AuthenticationSchemes = "Admin")]
         [AuthorizeDefinition(ActionType = ActionType.Reading, Definition = "Get Current User", Menu = "Users")]
-
         public async Task<IActionResult> GetCurrentUser([FromRoute] GetCurrentUserQueryRequest getCurrentUserQueryRequest)
         {
             GetCurrentUserQueryResponse getCurrentUserQueryResponse = await _mediator.Send(getCurrentUserQueryRequest);
             return Ok(getCurrentUserQueryResponse);
         }
+
+        [HttpPost("[Action]")]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [AuthorizeDefinition(ActionType = ActionType.Reading, Definition = "Upload Profile Photo", Menu = "Users")]
+        public async Task<IActionResult> UploadProfilePhoto([FromQuery] UploadProfilePhotoToUserCommandRequest uploadProfilePhotoToUserCommandRequest)
+        {
+            uploadProfilePhotoToUserCommandRequest.FormFiles = Request.Form.Files;
+            UploadProfilePhotoToUserCommandResponse response = await _mediator.Send(uploadProfilePhotoToUserCommandRequest);
+            return Ok(response);
+        }
+
+        [HttpGet("[Action]/{id}")]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [AuthorizeDefinition(ActionType = ActionType.Reading, Definition = "Get User Profile Photo", Menu = "Users")]
+        public async Task<IActionResult> GetUserProfilePhoto([FromRoute] GetUserProfilePhotoQueryRequest getUserProfilePhotoQueryRequest)
+        {
+            GetUserProfilePhotoQueryResponse response = await _mediator.Send(getUserProfilePhotoQueryRequest);
+            return Ok(response);
+        }
+
+
+
+
 
 
 

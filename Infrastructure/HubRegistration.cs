@@ -13,6 +13,7 @@ namespace Infrastructure
         public static void MapHubs(this WebApplication webApplication)
         {
             webApplication.MapHub<PostHub>("/post-hub");
+            webApplication.MapHub<ChatHub>("/chat-hub");
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Application.Abstracts.Services;
 using Application.Abstracts.Services.Auth;
 using Application.Repositories;
+using Application.Repositories.ProfilePhotos;
 using Domain.Entities.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Persistence.Contexts;
 using Persistence.Repositories;
 using Persistence.Repositories.File;
+using Persistence.Repositories.ProfilePhotos;
 using Persistence.Services;
 using System;
 using System.Collections.Generic;
@@ -49,6 +51,8 @@ namespace Persistence
               services.AddScoped<IEndpointWriteRepository, EndpointWriteRepository>();
               services.AddScoped<IMenuWriteRepository, MenuWriteRepository>();
               services.AddScoped<IMenuReadRepository, MenuReadRepository>();
+              services.AddScoped<IProfilePhotoWriteRepository, ProfilePhotoWriteRepository>();
+              services.AddScoped<IProfilePhotoReadRepository, ProfilePhotoReadRepository>();
             services.AddScoped<IAuthorizationEndpointService, AuthorizationEndpointService>();
 
             services.AddScoped<IUserService, UserService>();
@@ -56,6 +60,7 @@ namespace Persistence
             services.AddScoped<IInternalAuth, AuthService>();
             services.AddScoped<IExternalAuth, AuthService>();
             services.AddScoped<IRoleService, RoleService>();
+            services.AddSingleton<IChatService,ChatService>();
 
             return services;
         }

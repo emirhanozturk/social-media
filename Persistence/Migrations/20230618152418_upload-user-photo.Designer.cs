@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Persistence.Contexts;
@@ -11,9 +12,11 @@ using Persistence.Contexts;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(BaseDbContext))]
-    partial class BaseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230618152418_upload-user-photo")]
+    partial class uploaduserphoto
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -211,6 +214,9 @@ namespace Persistence.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("boolean");
 
+                    b.Property<Guid?>("ProfilePhotoId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("RefreshToken")
                         .HasColumnType("text");
 
@@ -235,6 +241,8 @@ namespace Persistence.Migrations
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
+
+                    b.HasIndex("ProfilePhotoId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -408,18 +416,6 @@ namespace Persistence.Migrations
                     b.HasDiscriminator().HasValue("Image");
                 });
 
-            modelBuilder.Entity("Domain.Entities.ProfilePhoto", b =>
-                {
-                    b.HasBaseType("Domain.Entities.File");
-
-                    b.Property<string>("AppUserId")
-                        .HasColumnType("text");
-
-                    b.HasIndex("AppUserId");
-
-                    b.HasDiscriminator().HasValue("ProfilePhoto");
-                });
-
             modelBuilder.Entity("Domain.Entities.Video", b =>
                 {
                     b.HasBaseType("Domain.Entities.File");
@@ -462,6 +458,15 @@ namespace Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Menu");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Identity.AppUser", b =>
+                {
+                    b.HasOne("Domain.Entities.Image", "ProfilePhoto")
+                        .WithMany()
+                        .HasForeignKey("ProfilePhotoId");
+
+                    b.Navigation("ProfilePhoto");
                 });
 
             modelBuilder.Entity("Domain.Entities.Post", b =>
@@ -535,20 +540,9 @@ namespace Persistence.Migrations
                     b.Navigation("Post");
                 });
 
-            modelBuilder.Entity("Domain.Entities.ProfilePhoto", b =>
-                {
-                    b.HasOne("Domain.Entities.Identity.AppUser", "AppUser")
-                        .WithMany("ProfilePhoto")
-                        .HasForeignKey("AppUserId");
-
-                    b.Navigation("AppUser");
-                });
-
             modelBuilder.Entity("Domain.Entities.Identity.AppUser", b =>
                 {
                     b.Navigation("Posts");
-
-                    b.Navigation("ProfilePhoto");
                 });
 
             modelBuilder.Entity("Domain.Entities.Menu", b =>

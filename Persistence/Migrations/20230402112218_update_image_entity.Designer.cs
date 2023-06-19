@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Persistence.Contexts;
@@ -11,9 +12,11 @@ using Persistence.Contexts;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(BaseDbContext))]
-    partial class BaseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230402112218_update_image_entity")]
+    partial class update_image_entity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +24,6 @@ namespace Persistence.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("AppRoleEndpoint", b =>
-                {
-                    b.Property<string>("AppRolesId")
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("EndpointsId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("AppRolesId", "EndpointsId");
-
-                    b.HasIndex("EndpointsId");
-
-                    b.ToTable("AppRoleEndpoint");
-                });
 
             modelBuilder.Entity("Domain.Entities.Comment", b =>
                 {
@@ -61,44 +49,6 @@ namespace Persistence.Migrations
                     b.HasIndex("PostId");
 
                     b.ToTable("Comments");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Endpoint", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("ActionType")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Definition")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("HttpType")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("MenuId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MenuId");
-
-                    b.ToTable("Endpoints");
                 });
 
             modelBuilder.Entity("Domain.Entities.File", b =>
@@ -239,27 +189,6 @@ namespace Persistence.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Entities.Menu", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Menus");
-                });
-
             modelBuilder.Entity("Domain.Entities.Post", b =>
                 {
                     b.Property<Guid>("Id")
@@ -280,12 +209,7 @@ namespace Persistence.Migrations
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Posts");
                 });
@@ -408,38 +332,11 @@ namespace Persistence.Migrations
                     b.HasDiscriminator().HasValue("Image");
                 });
 
-            modelBuilder.Entity("Domain.Entities.ProfilePhoto", b =>
-                {
-                    b.HasBaseType("Domain.Entities.File");
-
-                    b.Property<string>("AppUserId")
-                        .HasColumnType("text");
-
-                    b.HasIndex("AppUserId");
-
-                    b.HasDiscriminator().HasValue("ProfilePhoto");
-                });
-
             modelBuilder.Entity("Domain.Entities.Video", b =>
                 {
                     b.HasBaseType("Domain.Entities.File");
 
                     b.HasDiscriminator().HasValue("Video");
-                });
-
-            modelBuilder.Entity("AppRoleEndpoint", b =>
-                {
-                    b.HasOne("Domain.Entities.Identity.AppRole", null)
-                        .WithMany()
-                        .HasForeignKey("AppRolesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.Endpoint", null)
-                        .WithMany()
-                        .HasForeignKey("EndpointsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Entities.Comment", b =>
@@ -451,26 +348,6 @@ namespace Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Post");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Endpoint", b =>
-                {
-                    b.HasOne("Domain.Entities.Menu", "Menu")
-                        .WithMany("Endpoints")
-                        .HasForeignKey("MenuId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Menu");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Post", b =>
-                {
-                    b.HasOne("Domain.Entities.Identity.AppUser", "User")
-                        .WithMany("Posts")
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -533,27 +410,6 @@ namespace Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Post");
-                });
-
-            modelBuilder.Entity("Domain.Entities.ProfilePhoto", b =>
-                {
-                    b.HasOne("Domain.Entities.Identity.AppUser", "AppUser")
-                        .WithMany("ProfilePhoto")
-                        .HasForeignKey("AppUserId");
-
-                    b.Navigation("AppUser");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Identity.AppUser", b =>
-                {
-                    b.Navigation("Posts");
-
-                    b.Navigation("ProfilePhoto");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Menu", b =>
-                {
-                    b.Navigation("Endpoints");
                 });
 
             modelBuilder.Entity("Domain.Entities.Post", b =>

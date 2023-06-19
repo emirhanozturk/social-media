@@ -14,5 +14,6 @@ namespace Domain.Entities.Identity
         public string? RefreshToken { get; set; }
         public DateTime? RefreshTokenEndDate { get; set; }
         public virtual ICollection<Post>? Posts { get; set; }
+        public virtual ICollection<ProfilePhoto>? ProfilePhotos { get; set; }
     }
 }

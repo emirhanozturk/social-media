@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Entities.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class Image : File
+    public class ProfilePhoto : File
     {
-        public Post Post { get; set; }
-
+        public AppUser AppUser { get; set; }
     }
 }
